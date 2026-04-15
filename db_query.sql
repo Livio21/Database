@@ -74,10 +74,14 @@ insert into student (emri, email, birth_date, phone_number, pike, kursi_id) VALU
 --ndryshimi i kolones pike ne points
 alter table student rename column pike to points;
 
+--listimi i te gjithe kurseve
+select * from kursi;
+
 -- per te treguar te gjithe studentet qe ju fillon emri me shkronjen A
 select * from student where emri like 'A%';
 
-select * from student where emri like 'S%';
+-- per te treguar te gjithe kurset qe jane krijuar ne vitin 2023-2025
+select * from kursi where create_date between  '2023-01-01' and   '2025-12-31';
 
 -- per te treguar te gjithe studentet qe jane mbi 25 vjec
 select * from  student where ( date_part('year',current_date) - date_part('year', birth_date) >= 25);
