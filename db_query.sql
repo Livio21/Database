@@ -45,6 +45,8 @@ update kursi set programming_language='TypeScript' where emri_kursit like 'Angul
 update kursi set programming_language='Java' where emri_kursit like 'Spring%';
 
 update kursi set programming_language='JavaScript' where emri_kursit like 'Node%';
+update kursi set programming_language='JavaScript' where emri_kursit like 'React%';
+
 
 update kursi set programming_language='Dart' where emri_kursit like 'Flutter%';
 
@@ -52,7 +54,6 @@ update kursi set programming_language='R' where emri_kursit like 'Data%';
 
 update kursi set programming_language='Python' where emri_kursit like 'Machine%';
 
-update kursi set programming_language='Java' where emri_kursit like 'Java%';
 
 -- krijimi i tabeles student me foreign key kursi_id qe referon id e tabeles kursi
 create table student (
@@ -143,6 +144,12 @@ select  student.emri, kursi.emri_kursit from student join regjistri r on student
 -- Update i query per kurset mbi 3 student  pasi u shtua junction table per n-m mes student-kursi
 select emri_kursit as kurset_mbi_3_student, count(regjistri.kursi_id) from regjistri join kursi k on k.kursi_id = regjistri.kursi_id group by emri_kursit having count(regjistri.kursi_id) > 3;
 
+
+-- Using OFFSET: update query studenti me max points -> studenti i dyte me me shume pike
+select * from student order by points desc limit 1 offset 1;
+
+-- Using Distinct: Emrat unik nga tabela studenti
+select distinct emri from student;
 
 
 
