@@ -117,7 +117,7 @@ select  emri_kursit as kurset_mbi_3_student, count(student.kursi_id) from studen
 -- heq foreign key nga student table qe te mos jete one-to-many kurs-student
 alter table student drop column kursi_id;
 
--- Krijimi i junction table per te lidhur dy tabelat kursi dhe student
+-- Krijimi i junction table per te lidhur dy tabelat kursi dhe student, delete kur fshihen referencat/rows nga tabelat e student/kursi
 create table regjistri(
     student_id int references student(student_id) on delete cascade ,
     kursi_id int references kursi(kursi_id) on delete cascade ,
