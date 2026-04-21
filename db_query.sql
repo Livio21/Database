@@ -100,11 +100,11 @@ select count(*) from kursi where emri_kursit like '%J%';
 
 -- Studenti qe ka max e pikeve
 select * from student where points = (select max(points) from student);
-
+alter table student add column kursi_id int;
 -- Kurset qe kane me shume se 3 studenta
-select emri_kursit, count(student.kursi_id) from student join kursi k on student.kursi_id = k.id group by emri_kursit having count(kursi_id) > 3
+select  emri_kursit as kurset_mbi_3_student, count(student.kursi_id) from student join kursi k on student.kursi_id = k.kursi_id group by emri_kursit having count(student.kursi_id) < 3;
 -- Ngaqe jan disa repeated courses me emra te njejte
---select kursi_id, count(student.kursi_id) from student join kursi k on student.kursi_id = k.id group by kursi_id having count(kursi_id) > 3
+--select kursi_id, count(student.kursi_id) from student join kursi k on student.kursi_id = k.id group by kursi_id having count(kursi_id) > 3;
 
 -- Marrdhenie Many-to-Many mes tabelave
 
@@ -112,22 +112,34 @@ select emri_kursit, count(student.kursi_id) from student join kursi k on student
 alter table student drop column kursi_id;
 -- Krijimi i junction table per te lidhur dy tabelat kursi dhe student
 create table regjistri(
-    student_id int references student(student_id),
-    kursi_id int references kursi(kursi_id),
+    student_id int references student(student_id) on delete cascade ,
+    kursi_id int references kursi(kursi_id) on delete cascade ,
      primary key (student_id,kursi_id)
 );
 
 -- "regjistrimi" i studentave ne kurse
 insert into regjistri(student_id, kursi_id) values (1, 5);
+insert into regjistri(student_id, kursi_id) values (2, 5);
+insert into regjistri(student_id, kursi_id) values (4, 5);
+insert into regjistri(student_id, kursi_id) values (7, 5);
+
 insert into regjistri(student_id, kursi_id) values (3, 6);
 insert into regjistri(student_id, kursi_id) values (10, 6);
+insert into regjistri(student_id, kursi_id) values (5, 6);
+insert into regjistri(student_id, kursi_id) values (6, 6);
+insert into regjistri(student_id, kursi_id) values (8, 4);
+
+
 
 
 -- Emer studenti dhe emer kursi per cdo student
 select  student.emri, kursi.emri_kursit from student join regjistri r on student.student_id = r.student_id join kursi on kursi.kursi_id = r.kursi_id;
 
+-- ndryshimi i constraint tek kursi qe te mos dalin dublicates me emer te njejte
+alter table kursi add constraint u_emri_kursi unique (emri_kursit);
 
-
+-- Update i query per kurset mbi 3 student  pasi u shtua junction table per n-m mes student-kursi
+select emri_kursit as kurset_mbi_3_student, count(regjistri.kursi_id) from regjistri join kursi k on k.kursi_id = regjistri.kursi_id group by emri_kursit having count(regjistri.kursi_id) > 3;
 
 
 
